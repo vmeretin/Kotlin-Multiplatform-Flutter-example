@@ -8,6 +8,10 @@ import io.flutter.plugins.GeneratedPluginRegistrant
 
 class MainActivity : FlutterActivity() {
 
+    companion object {
+        private const val CHANNEL = "habr.example.flutter/hello"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         GeneratedPluginRegistrant.registerWith(this)
@@ -18,9 +22,5 @@ class MainActivity : FlutterActivity() {
                 result.notImplemented()
             }
         }
-    }
-
-    companion object {
-        private const val CHANNEL = "habr.example.flutter/hello"
     }
 }

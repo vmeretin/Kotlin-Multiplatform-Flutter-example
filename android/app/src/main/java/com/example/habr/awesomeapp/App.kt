@@ -5,7 +5,7 @@ import android.util.Log
 import habr.example.hello
 import io.flutter.facade.Flutter
 
-class App: Application() {
+class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
