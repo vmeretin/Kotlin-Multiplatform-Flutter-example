@@ -1,0 +1,21 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+target 'Awesome App' do
+  # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
+  use_frameworks!
+  flutter_application_path = File.expand_path("../flutter_ui", File.dirname(path))
+  eval(File.read(File.join(flutter_application_path, '.ios', 'Flutter', 'podhelper.rb')), binding)
+  # Pods for Awesome App
+
+  target 'Awesome AppTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+  target 'Awesome AppUITests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+end
