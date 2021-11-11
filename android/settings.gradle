@@ -15,3 +15,5 @@ settings.pluginManagement {
 include ':app'
 setBinding(new Binding([gradle: this]))
 evaluate(new File(settingsDir.parentFile, 'flutter-ui/.android/include_flutter.groovy'))
+include ':flutter-ui'
+project(':flutter-ui').projectDir = new File('../flutter-ui')
