@@ -1,21 +1,75 @@
 plugins {
-    id 'kotlin-multiplatform' version '1.3.11'
+    id 'org.jetbrains.kotlin.multiplatform' version "1.5.31"
+    id 'maven-publish'
+} 
+
+//ResolvedConfiguration
+def resolvedConfiguration = this.rootProject.buildscript.configurations.classpath.resolvedConfiguration
+
+//println "Show ResolvedConfiguration properties : " + resolvedConfiguration.properties
+//Set<ResolvedDependency>
+def resolvedDependency_set = resolvedConfiguration.firstLevelModuleDependencies
+resolvedDependency_set.each { resolvedDependency ->
+    def name = resolvedDependency.name
+    def group = resolvedDependency.getModuleGroup()
+    def modulename = resolvedDependency.getModuleName()
+    def moduleversion = resolvedDependency.getModuleVersion()
+    println "Show Dependency plugin name : " + name
+    println "Show Dependency plugin group : " + group
+    println "Show Dependency plugin modulename : " + modulename
+    println "Show Dependency plugin moduleversion : " +moduleversion
 }
-repositories {
-    mavenCentral()
+
+final List<String> exclusions = []
+Dependency.metaClass.exclude = { String[] currentExclusions ->
+    currentExclusions.each {
+        println "Show getGroup() : " + getGroup()
+        println "Show getName() : " + getName()
+        println "Show getVersion() : " + getVersion()
+        exclusions.add("${getGroup()}/${getName()}/${getVersion()}/${it}")
+    }
+    return thisObject
 }
+
 group 'habr.example'
 version '0.0.1'
 
-apply plugin: 'maven-publish'
+repositories {
+    mavenCentral()
+    mavenLocal()
+    gradlePluginPortal()
+    google()
+    maven {
+        url = "https://maven.pkg.jetbrains.space/public/p/compose/dev"
+    }
+//    maven {
+//        url = 'file://' + new File(System.getProperty('user.home'), '.m2/repository').absolutePath
+//    }    
+}
 
 kotlin {
     targets {
-        fromPreset(presets.jvm, 'jvm')
-        // This preset is for iPhone emulator
-        // Switch here to presets.iosArm64 to build library for iPhone device
-        fromPreset(presets.iosX64, 'ios') {
-            compilations.main.outputKinds('FRAMEWORK')
+        targetFromPreset(presets.jvm, 'jvm')
+//        fromPreset(presets.jvm, 'jvm')
+//        // This preset is for iPhone emulator
+//        // Switch here to presets.iosArm64 to build library for iPhone device
+//        fromPreset(presets.iosX64, 'ios') {
+//            compilations.main.outputKinds('FRAMEWORK')
+//        }
+        targetFromPreset(presets.iosX64, 'ios') {
+//            compilations.main.outputKinds('FRAMEWORK')
+            compilations.main {
+                cinterops {
+                    External_lib {
+                        // Package to place the Kotlin API generated
+                        packageName 'habr.example.commonLibrary'
+
+                        // Options to be passed to compiler by cinterop tool
+                        compilerOpts '-Isrc/nativeInterop/frameworks/External_lib.framework/Headers'
+
+                    }
+                }
+            }
         }
     }
     sourceSets {
@@ -48,6 +102,14 @@ kotlin {
     }
 }
 
-configurations {
-    compileClasspath
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        freeCompilerArgs += ["-Xskip-prerelease-check"]
+        jvmTarget = "11"
+        useIR = true
+    }
 }
+
+//configurations {
+//    compileClasspath
+//}
