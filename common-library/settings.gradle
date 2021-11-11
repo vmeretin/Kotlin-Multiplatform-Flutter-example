@@ -1,13 +1,26 @@
-pluginManagement {
-    resolutionStrategy {
-        eachPlugin {
-            if (requested.id.id == "kotlin-multiplatform") {
-                useModule("org.jetbrains.kotlin:kotlin-gradle-plugin:${requested.version}")
-            }
+//pluginManagement {
+//    resolutionStrategy {
+//        eachPlugin {
+//            if (requested.id.id == "kotlin-multiplatform") {
+//                useModule("org.jetbrains.kotlin:kotlin-gradle-plugin:${requested.version}")
+//            }
+//        }
+//    }
+//}
+rootProject.name = 'commonLibrary'
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+        gradlePluginPortal()
+        google()
+        maven {
+            url = "https://maven.pkg.jetbrains.space/public/p/compose/dev"
         }
+//        maven {
+//            url = 'file://' + new File(System.getProperty('user.home'), '.m2/repository').absolutePath
+//        }
     }
 }
-rootProject.name = 'commonLibrary'
 
-
-enableFeaturePreview('GRADLE_METADATA')
+//enableFeaturePreview('GRADLE_METADATA')

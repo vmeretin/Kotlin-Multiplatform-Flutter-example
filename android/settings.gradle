@@ -1,3 +1,19 @@
+settings.pluginManagement {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+        gradlePluginPortal()
+        google()
+        maven {
+            url = "https://maven.pkg.jetbrains.space/public/p/compose/dev"
+        }
+//        maven {
+//            url = 'file://' + new File(System.getProperty('user.home'), '.m2/repository').absolutePath
+//        }
+    }
+}
 include ':app'
 setBinding(new Binding([gradle: this]))
 evaluate(new File(settingsDir.parentFile, 'flutter-ui/.android/include_flutter.groovy'))
+include ':flutter-ui'
+project(':flutter-ui').projectDir = new File('../flutter-ui')
